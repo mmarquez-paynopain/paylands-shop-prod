@@ -1,0 +1,274 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    background-color: #333;
+    color: white;
+}
+
+#cart-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EE1B4E;
+    color: white;
+    border: none;
+    padding: 0.5em;
+    width: 50px;
+    height: 50px;
+    font-size: 1em;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+}
+
+#cart-button i {
+    font-size: 1.5em;
+}
+
+#cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 0.8em;
+}
+
+#cart-button:hover {
+    background-color: #EE1B4E;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1em;
+    padding: 1em;
+}
+
+.product {
+    border: 1px solid #ccc;
+    padding: 1em;
+    text-align: center;
+    background-color: white;
+    border-radius: 4px;
+}
+
+.product img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 0.5em;
+    cursor: pointer;
+    padding: 0.5em 1em;
+    border: none;
+    background-color: #EE1B4E;
+    color: white;
+    font-size: 1em;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #333;
+}
+
+button.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 4px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.config_form {
+    display: none;
+    flex-direction: column;
+}
+
+.config_form label {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 8px;
+    width: 420px;
+}
+
+.config_form input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+}
+
+a {
+    padding: 5px;
+    flex: 0.65;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.env-selector {
+    width: 100%;
+    margin: 4px auto;
+    padding: 8px 24px 8px 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="%23888888"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Icono desplegable */
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+
+.env-selector:focus,
+.env-selector:hover {
+    border-color: #EE1B4E;
+}
+
+.env-selector option {
+    background-color: white;
+    color: black;
+}
+
+.env-selector label {
+    margin-right: 8px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Estilos para el toast */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 4px;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+.toast.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#checkout {
+    flex-direction: column;
+    height: 100%;
+    padding: 1em;
+}
+
+#payment-iframe {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+}
+
+#pay-button {
+    width: 200px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .modal-content {
+        width: 90%;
+        margin-top: 30%;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+
+    .modal-content {
+        width: 90%;
+        margin-top: 40%;
+    }
+}

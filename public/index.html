@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La tienda de Paylands</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<header>
+    <h1>La tienda de Paylands</h1>
+    <button id="cart-button"><i class="fas fa-shopping-cart"></i><span id="cart-count">0</span></button>
+</header>
+<div id="toast" class="toast hidden">Producto añadido al carrito</div>
+<main>
+    <div class="product-grid">
+        <div class="product">
+            <img src="/img/1.jpg" alt="Producto 1">
+            <p>Producto 1 - 1€</p>
+            <div id="pay-google-pay"></div>
+            <button class="add-to-cart" data-id="1" data-price="1">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="/img/2.jpg" alt="Producto 2">
+            <p>Producto 2 - 2€</p>
+            <button class="add-to-cart" data-id="2" data-price="2">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="/img/3.jpg" alt="Producto 3">
+            <p>Producto 3 - 3€</p>
+            <button class="add-to-cart" data-id="3" data-price="3">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="/img/4.jpg" alt="Producto 4">
+            <p>Producto 4 - 4€</p>
+            <button class="add-to-cart" data-id="4" data-price="4">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="/img/5.jpg" alt="Producto 5">
+            <p>Producto 5 - 5€</p>
+            <button class="add-to-cart" data-id="5" data-price="5">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="/img/6.jpg" alt="Producto 6">
+            <p>Producto 6 - 6€</p>
+            <button class="add-to-cart" data-id="6" data-price="6">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="/img/7.jpg" alt="Producto 7">
+            <p>Producto 7 - 7€</p>
+            <button class="add-to-cart" data-id="7" data-price="7">Añadir al carrito</button>
+        </div>
+        <div class="product">
+            <img src="/img/8.jpg" alt="Producto 8">
+            <p>Producto 8 - 8€</p>
+            <button class="add-to-cart" data-id="8" data-price="8">Añadir al carrito</button>
+        </div>
+    </div>
+</main>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Seleccione un método de pago</h2>
+        <select id="payment-method" class="env-selector">
+            <option value="redirect">Checkout por redirección</option>
+            <option value="render">Checkout renderizado</option>
+            <option value="payment_card">Tarjeta de crédito</option>
+            <option value="wallets">Google Pay</option>
+            <option value="paypal">PayPal</option>
+            <option value="bizum">Bizum</option>
+            <!-- <option value="crypto">Crypto</option> -->
+            <!-- <option value="pix">Pix</option> No se puede realizar un pago con euros -->
+            <option value="viacash">Viacash</option>
+            <option value="ideal">Ideal</option>
+            <option value="sofort">Sofort</option>
+            <option value="klarna">Klarna</option>
+            <option value="giropay">Giropay</option>
+            <option value="transfer">Transferencia</option>
+            <!-- <option value="pse">Pse</option> -->
+            <!-- <option value="spei">Spei</option> No se puede realizar un pago con euros -->
+            <option value="cofidis">Cofidis</option>
+            <option value="multibanco">Multibanco</option>
+            <option value="mbway">MBWay</option>
+            <option value="floa">Floa</option>
+            <!-- <option value="paysafecard">Paysafecard</option> No está integrado aun -->
+            <!-- <option value="pagofacil">Pago Facil</option> -->
+            <!-- <option value="efecty">Efecty</option> -->
+            <!-- <option value="boleto">Boleto</option> No se puede realizar un pago con euros -->
+            <!-- <option value="loterica">Loterica</option> No se puede realizar un pago con euros -->
+            <!-- <option value="payshop">Payshop</option> No está integrado aun -->
+            <!-- <option value="payretailers">Payretailers</option> -->
+            <!-- <option value="khipu">Khipu</option> No se puede realizar un pago con euros -->
+            <!-- <option value="mach">Mach</option> No se puede realizar un pago con euros -->
+            <!-- <option value="klap">Klap</option> No se puede realizar un pago con euros -->
+            <!-- <option value="flowpay">Flow Pay</option> No se puede realizar un pago con euros -->
+            <!-- <option value="servipag">Servipag</option> No se puede realizar un pago con euros -->
+            <!-- <option value="picpay">Pic Pay</option> No se puede realizar un pago con euros -->
+        </select>
+        <form id="payment_card_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="holder-label">holderLabel</label><input type="text" id="holder-label" value="Nombre y apellidos"/>
+                <label for="holder-error">holderError</label><input type="text" id="holder-error" value="Nombre incorrecto"/>
+            </div>
+            <div class="row">
+                <label for="pan-label">panLabel</label><input type="text" id="pan-label" value="Número de la tarjeta"/>
+                <label for="pan-error">panError</label><input type="text" id="pan-error" value="Número de la tarjeta incorrecto"/>
+            </div>
+            <div class="row">
+                <label for="expiry-label">expiryLabel</label><input type="text" id="expiry-label" value="Fecha de caducidad"/>
+                <label for="expiry-error">expiryError</label><input type="text" id="expiry-error" value="Fecha incorrecta o caducada"/>
+            </div>
+            <div class="row">
+                <label for="cvv-label">cvvLabel</label><input type="text" id="cvv-label" value="Código de seguridad"/>
+                <label for="cvv-error">cvvError</label><input type="text" id="cvv-error" value="CVV incorrecto"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="font">font</label><input type="text" id="font" value="system-ui"/>
+                <label for="text-color">textColor</label><input type="color" id="text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="background-color">backgroundColor</label><input type="color" id="background-color" value="#FFFFFF"/>
+                <label for="error-color">errorColor</label><input type="color" id="error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="border-color">borderColor</label><input type="color" id="border-color" value="#EE1B4E"/>
+                <label for="icon-color">iconColor</label><input type="color" id="icon-color" value="#EE1B4E"/>
+            </div>
+            <div class="row">
+                <label for="border-radius">borderRadius</label><input type="text" id="border-radius" value="16px"/>
+                <label for="padding">padding</label><input type="text" id="padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="input-text-size">inputTextSize</label><input type="text" id="input-text-size" value="14px"/>
+                <label for="label-text-size">labelTextSize</label><input type="text" id="label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#formulario-de-tarjeta">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="paypal_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="paypal-prefilled-address">prefilledAddress</label><input type="text" id="paypal-prefilled-address" value=""/>
+                <label for="paypal-prefilled-country">prefilledCountry</label><input type="text" id="paypal-prefilled-country" maxlength="3" value=""/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="layout">layout</label><input type="text" id="layout" value="horizontal"/>
+                <label for="color">color</label><input type="text" id="color" value="black"/>
+            </div>
+            <div class="row">
+                <label for="label">label</label><input type="text" id="label" value="pay"/>
+                <label for="borderRadius">borderRadius</label><input type="number" id="borderRadius" value="16"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#paypal">Paylands documentation</a>
+                <a href="https://developer.paypal.com/sdk/js/reference/">PayPal documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="bizum_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="bizum-prefix-label">prefixLabel</label><input type="text" id="bizum-prefix-label" value="Prefijo"/>
+                <label for="bizum-prefix-error">prefixError</label><input type="text" id="bizum-prefix-error" value="El prefijo no es válido"/>
+            </div>
+            <div class="row">
+                <label for="bizum-phone-label">phoneLabel</label><input type="text" id="bizum-phone-label" value="Número de teléfono"/>
+                <label for="bizum-phone-error">phoneError</label><input type="text" id="bizum-phone-error" value="El número no es válido"/>
+            </div>
+            <div class="row">
+                <label for="bizum-prefilled-prefix">prefilledPrefix</label><input type="number" id="bizum-prefilled-prefix" maxlength="3" value=""/>
+                <label for="bizum-prefilled-phone">prefilledPhone</label><input type="number" id="bizum-prefilled-phone" maxlength="9" value=""/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="bizum-font">font</label><input type="text" id="bizum-font" value="system-ui"/>
+                <label for="bizum-text-color">textColor</label><input type="color" id="bizum-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="bizum-background-color">backgroundColor</label><input type="color" id="bizum-background-color" value="#FFFFFF"/>
+                <label for="bizum-error-color">errorColor</label><input type="color" id="bizum-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="bizum-border-color">borderColor</label><input type="color" id="bizum-border-color" value="#04b9c6"/>
+                <label for="bizum-icon-color">iconColor</label><input type="color" id="bizum-icon-color" value="#04b9c6"/>
+            </div>
+            <div class="row">
+                <label for="bizum-border-radius">borderRadius</label><input type="text" id="bizum-border-radius" value="16px"/>
+                <label for="bizum-padding">padding</label><input type="text" id="bizum-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="bizum-input-text-size">inputTextSize</label><input type="text" id="bizum-input-text-size" value="14px"/>
+                <label for="bizum-label-text-size">labelTextSize</label><input type="text" id="bizum-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#bizum">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="cofidis_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="cofidis-name-label">nameLabel</label><input type="text" id="cofidis-name-label" value="Nombre"/>
+                <label for="cofidis-name-error">nameError</label><input type="text" id="cofidis-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="cofidis-lastname-label">lastNameLabel</label><input type="text" id="cofidis-lastname-label" value="Apellido"/>
+                <label for="cofidis-lastname-error">lastNameError</label><input type="text" id="cofidis-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="cofidis-email-label">emailLabel</label><input type="text" id="cofidis-email-label" value="Email"/>
+                <label for="cofidis-email-error">emailError</label><input type="text" id="cofidis-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="cofidis-prefilled-name">prefilledName</label><input type="text" id="cofidis-prefilled-name" value=""/>
+                <label for="cofidis-prefilled-lastname">prefilledLastName</label><input type="text" id="cofidis-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="cofidis-prefilled-email">prefilledEmail</label><input type="text" id="cofidis-prefilled-email" value=""/>
+                <label></label><input style="border: 0;"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="cofidis-font">font</label><input type="text" id="cofidis-font" value="system-ui"/>
+                <label for="cofidis-text-color">textColor</label><input type="color" id="cofidis-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="cofidis-background-color">backgroundColor</label><input type="color" id="cofidis-background-color" value="#FFFFFF"/>
+                <label for="cofidis-error-color">errorColor</label><input type="color" id="cofidis-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="cofidis-border-color">borderColor</label><input type="color" id="cofidis-border-color" value="#EFBF4E"/>
+                <label for="cofidis-icon-color">iconColor</label><input type="color" id="cofidis-icon-color" value="#EFBF4E"/>
+            </div>
+            <div class="row">
+                <label for="cofidis-border-radius">borderRadius</label><input type="text" id="cofidis-border-radius" value="16px"/>
+                <label for="cofidis-padding">padding</label><input type="text" id="cofidis-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="cofidis-input-text-size">inputTextSize</label><input type="text" id="cofidis-input-text-size" value="14px"/>
+                <label for="cofidis-label-text-size">labelTextSize</label><input type="text" id="cofidis-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#cofidis">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="giropay_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="giropay-name-label">nameLabel</label><input type="text" id="giropay-name-label" value="Nombre"/>
+                <label for="giropay-name-error">nameError</label><input type="text" id="giropay-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="giropay-lastname-label">lastNameLabel</label><input type="text" id="giropay-lastname-label" value="Apellido"/>
+                <label for="giropay-lastname-error">lastNameError</label><input type="text" id="giropay-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="giropay-email-label">emailLabel</label><input type="text" id="giropay-email-label" value="Email"/>
+                <label for="giropay-email-error">emailError</label><input type="text" id="giropay-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="giropay-address-label">addressLabel</label><input type="text" id="giropay-address-label" value="Dirección"/>
+                <label for="giropay-address-error">addressError</label><input type="text" id="giropay-address-error" value="La dirección no es válida"/>
+            </div>
+            <div class="row">
+                <label for="giropay-zipcode-label">zipCodeLabel</label><input type="text" id="giropay-zipcode-label" value="Código postal"/>
+                <label for="giropay-zipcode-error">zipCodeError</label><input type="text" id="giropay-zipcode-error" value="El código postal no es válido"/>
+            </div>
+            <div class="row">
+                <label for="giropay-city-label">cityLabel</label><input type="text" id="giropay-city-label" value="Ciudad"/>
+                <label for="giropay-city-error">cityError</label><input type="text" id="giropay-city-error" value="La ciudad no es válida"/>
+            </div>
+            <div class="row">
+                <label for="giropay-country-label">countryLabel</label><input type="text" id="giropay-country-label" value="País"/>
+                <label for="giropay-country-error">countryError</label><input type="text" id="giropay-country-error" value="El pais no es válido"/>
+            </div>
+            <div class="row">
+                <label for="giropay-state-label">stateLabel</label><input type="text" id="giropay-state-label" value="Estado"/>
+                <label for="giropay-state-error">stateError</label><input type="text" id="giropay-state-error" value="El estado no es válido"/>
+            </div>
+            <div class="row">
+                <label for="giropay-prefilled-name">prefilledName</label><input type="text" id="giropay-prefilled-name" value=""/>
+                <label for="giropay-prefilled-lastname">prefilledLastName</label><input type="text" id="giropay-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="giropay-prefilled-email">prefilledEmail</label><input type="text" id="giropay-prefilled-email" value=""/>
+                <label for="giropay-prefilled-address">prefilledAddress</label><input type="text" id="giropay-prefilled-address" value=""/>
+            </div>
+            <div class="row">
+                <label for="giropay-prefilled-zipcode">prefilledZipCode</label><input type="text" id="giropay-prefilled-zipcode" value=""/>
+                <label for="giropay-prefilled-city">prefilledCity</label><input type="text" id="giropay-prefilled-city" value=""/>
+            </div>
+            <div class="row">
+                <label for="giropay-prefilled-country">prefilledCountry</label><input type="text" id="giropay-prefilled-country" value=""/>
+                <label for="giropay-prefilled-state">prefilledState</label><input type="text" id="giropay-prefilled-state" value=""/>
+            </div>
+            </hr>
+            <div class="row">
+                <label for="giropay-font">font</label><input type="text" id="giropay-font" value="system-ui"/>
+                <label for="giropay-text-color">textColor</label><input type="color" id="giropay-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="giropay-background-color">backgroundColor</label><input type="color" id="giropay-background-color" value="#FFFFFF"/>
+                <label for="giropay-error-color">errorColor</label><input type="color" id="giropay-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="giropay-border-color">borderColor</label><input type="color" id="giropay-border-color" value="#1F3A6A"/>
+                <label for="giropay-icon-color">iconColor</label><input type="color" id="giropay-icon-color" value="#1F3A6A"/>
+            </div>
+            <div class="row">
+                <label for="giropay-border-radius">borderRadius</label><input type="text" id="giropay-border-radius" value="16px"/>
+                <label for="giropay-padding">padding</label><input type="text" id="giropay-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="giropay-input-text-size">inputTextSize</label><input type="text" id="giropay-input-text-size" value="14px"/>
+                <label for="giropay-label-text-size">labelTextSize</label><input type="text" id="giropay-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#giropay">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="ideal_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="ideal-name-label">nameLabel</label><input type="text" id="ideal-name-label" value="Nombre"/>
+                <label for="ideal-name-error">nameError</label><input type="text" id="ideal-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="ideal-lastname-label">lastNameLabel</label><input type="text" id="ideal-lastname-label" value="Apellido"/>
+                <label for="ideal-lastname-error">lastNameError</label><input type="text" id="ideal-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="ideal-email-label">emailLabel</label><input type="text" id="ideal-email-label" value="Email"/>
+                <label for="ideal-email-error">emailError</label><input type="text" id="ideal-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="ideal-address-label">addressLabel</label><input type="text" id="ideal-address-label" value="Dirección"/>
+                <label for="ideal-address-error">addressError</label><input type="text" id="ideal-address-error" value="La dirección no es válida"/>
+            </div>
+            <div class="row">
+                <label for="ideal-zipcode-label">zipCodeLabel</label><input type="text" id="ideal-zipcode-label" value="Código postal"/>
+                <label for="ideal-zipcode-error">zipCodeError</label><input type="text" id="ideal-zipcode-error" value="El código postal no es válido"/>
+            </div>
+            <div class="row">
+                <label for="ideal-city-label">cityLabel</label><input type="text" id="ideal-city-label" value="Ciudad"/>
+                <label for="ideal-city-error">cityError</label><input type="text" id="ideal-city-error" value="La ciudad no es válida"/>
+            </div>
+            <div class="row">
+                <label for="ideal-country-label">countryLabel</label><input type="text" id="ideal-country-label" value="País"/>
+                <label for="ideal-country-error">countryError</label><input type="text" id="ideal-country-error" value="El pais no es válido"/>
+            </div>
+            <div class="row">
+                <label for="ideal-state-label">stateLabel</label><input type="text" id="ideal-state-label" value="Estado"/>
+                <label for="ideal-state-error">stateError</label><input type="text" id="ideal-state-error" value="El estado no es válido"/>
+            </div>
+            <div class="row">
+                <label for="ideal-prefilled-name">prefilledName</label><input type="text" id="ideal-prefilled-name" value=""/>
+                <label for="ideal-prefilled-lastname">prefilledLastName</label><input type="text" id="ideal-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="ideal-prefilled-email">prefilledEmail</label><input type="text" id="ideal-prefilled-email" value=""/>
+                <label for="ideal-prefilled-address">prefilledAddress</label><input type="text" id="ideal-prefilled-address" value=""/>
+            </div>
+            <div class="row">
+                <label for="ideal-prefilled-zipcode">prefilledZipCode</label><input type="text" id="ideal-prefilled-zipcode" value=""/>
+                <label for="ideal-prefilled-city">prefilledCity</label><input type="text" id="ideal-prefilled-city" value=""/>
+            </div>
+            <div class="row">
+                <label for="ideal-prefilled-country">prefilledCountry</label><input type="text" id="ideal-prefilled-country" value=""/>
+                <label for="ideal-prefilled-state">prefilledState</label><input type="text" id="ideal-prefilled-state" value=""/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="ideal-font">font</label><input type="text" id="ideal-font" value="system-ui"/>
+                <label for="ideal-text-color">textColor</label><input type="color" id="ideal-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="ideal-background-color">backgroundColor</label><input type="color" id="ideal-background-color" value="#FFFFFF"/>
+                <label for="ideal-error-color">errorColor</label><input type="color" id="ideal-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="ideal-border-color">borderColor</label><input type="color" id="ideal-border-color" value="#CC0066"/>
+                <label for="ideal-icon-color">iconColor</label><input type="color" id="ideal-icon-color" value="#CC0066"/>
+            </div>
+            <div class="row">
+                <label for="ideal-border-radius">borderRadius</label><input type="text" id="ideal-border-radius" value="16px"/>
+                <label for="ideal-padding">padding</label><input type="text" id="ideal-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="ideal-input-text-size">inputTextSize</label><input type="text" id="ideal-input-text-size" value="14px"/>
+                <label for="ideal-label-text-size">labelTextSize</label><input type="text" id="ideal-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#ideal">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="viacash_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="viacash-name-label">nameLabel</label><input type="text" id="viacash-name-label" value="Nombre"/>
+                <label for="viacash-name-error">nameError</label><input type="text" id="viacash-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="viacash-lastname-label">lastNameLabel</label><input type="text" id="viacash-lastname-label" value="Apellido"/>
+                <label for="viacash-lastname-error">lastNameError</label><input type="text" id="viacash-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="viacash-email-label">emailLabel</label><input type="text" id="viacash-email-label" value="Email"/>
+                <label for="viacash-email-error">emailError</label><input type="text" id="viacash-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="viacash-prefilled-name">prefilledName</label><input type="text" id="viacash-prefilled-name" value=""/>
+                <label for="viacash-prefilled-lastname">prefilledLastName</label><input type="text" id="viacash-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="viacash-prefilled-email">prefilledEmail</label><input type="text" id="viacash-prefilled-email" value=""/>
+                <label></label><input style="border: 0;"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="viacash-font">font</label><input type="text" id="viacash-font" value="system-ui"/>
+                <label for="viacash-text-color">textColor</label><input type="color" id="viacash-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="viacash-background-color">backgroundColor</label><input type="color" id="viacash-background-color" value="#FFFFFF"/>
+                <label for="viacash-error-color">errorColor</label><input type="color" id="viacash-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="viacash-border-color">borderColor</label><input type="color" id="viacash-border-color" value="#52FFD0"/>
+                <label for="viacash-icon-color">iconColor</label><input type="color" id="viacash-icon-color" value="#52FFD0"/>
+            </div>
+            <div class="row">
+                <label for="viacash-border-radius">borderRadius</label><input type="text" id="viacash-border-radius" value="16px"/>
+                <label for="viacash-padding">padding</label><input type="text" id="viacash-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="viacash-input-text-size">inputTextSize</label><input type="text" id="viacash-input-text-size" value="14px"/>
+                <label for="viacash-label-text-size">labelTextSize</label><input type="text" id="viacash-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#viacash">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="sofort_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="sofort-name-label">nameLabel</label><input type="text" id="sofort-name-label" value="Nombre"/>
+                <label for="sofort-name-error">nameError</label><input type="text" id="sofort-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="sofort-lastname-label">lastNameLabel</label><input type="text" id="sofort-lastname-label" value="Apellido"/>
+                <label for="sofort-lastname-error">lastNameError</label><input type="text" id="sofort-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="sofort-email-label">emailLabel</label><input type="text" id="sofort-email-label" value="Email"/>
+                <label for="sofort-email-error">emailError</label><input type="text" id="sofort-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="sofort-address-label">addressLabel</label><input type="text" id="sofort-address-label" value="Dirección"/>
+                <label for="sofort-address-error">addressError</label><input type="text" id="sofort-address-error" value="La dirección no es válida"/>
+            </div>
+            <div class="row">
+                <label for="sofort-zipcode-label">zipCodeLabel</label><input type="text" id="sofort-zipcode-label" value="Código postal"/>
+                <label for="sofort-zipcode-error">zipCodeError</label><input type="text" id="sofort-zipcode-error" value="El código postal no es válido"/>
+            </div>
+            <div class="row">
+                <label for="sofort-city-label">cityLabel</label><input type="text" id="sofort-city-label" value="Ciudad"/>
+                <label for="sofort-city-error">cityError</label><input type="text" id="sofort-city-error" value="La ciudad no es válida"/>
+            </div>
+            <div class="row">
+                <label for="sofort-country-label">countryLabel</label><input type="text" id="sofort-country-label" value="País"/>
+                <label for="sofort-country-error">countryError</label><input type="text" id="sofort-country-error" value="El pais no es válido"/>
+            </div>
+            <div class="row">
+                <label for="sofort-state-label">stateLabel</label><input type="text" id="sofort-state-label" value="Estado"/>
+                <label for="sofort-state-error">stateError</label><input type="text" id="sofort-state-error" value="El estado no es válido"/>
+            </div>
+            <div class="row">
+                <label for="sofort-prefilled-name">prefilledName</label><input type="text" id="sofort-prefilled-name" value=""/>
+                <label for="sofort-prefilled-lastname">prefilledLastName</label><input type="text" id="sofort-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="sofort-prefilled-email">prefilledEmail</label><input type="text" id="sofort-prefilled-email" value=""/>
+                <label for="sofort-prefilled-address">prefilledAddress</label><input type="text" id="sofort-prefilled-address" value=""/>
+            </div>
+            <div class="row">
+                <label for="sofort-prefilled-zipcode">prefilledZipCode</label><input type="text" id="sofort-prefilled-zipcode" value=""/>
+                <label for="sofort-prefilled-city">prefilledCity</label><input type="text" id="sofort-prefilled-city" value=""/>
+            </div>
+            <div class="row">
+                <label for="sofort-prefilled-country">prefilledCountry</label><input type="text" id="sofort-prefilled-country" value=""/>
+                <label for="sofort-prefilled-state">prefilledState</label><input type="text" id="sofort-prefilled-state" value=""/>
+            </div>
+            </hr>
+            <div class="row">
+                <label for="sofort-font">font</label><input type="text" id="sofort-font" value="system-ui"/>
+                <label for="sofort-text-color">textColor</label><input type="color" id="sofort-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="sofort-background-color">backgroundColor</label><input type="color" id="sofort-background-color" value="#FFFFFF"/>
+                <label for="sofort-error-color">errorColor</label><input type="color" id="sofort-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="sofort-border-color">borderColor</label><input type="color" id="sofort-border-color" value="#FFA8CD"/>
+                <label for="sofort-icon-color">iconColor</label><input type="color" id="sofort-icon-color" value="#FFA8CD"/>
+            </div>
+            <div class="row">
+                <label for="sofort-border-radius">borderRadius</label><input type="text" id="sofort-border-radius" value="16px"/>
+                <label for="sofort-padding">padding</label><input type="text" id="sofort-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="sofort-input-text-size">inputTextSize</label><input type="text" id="sofort-input-text-size" value="14px"/>
+                <label for="sofort-label-text-size">labelTextSize</label><input type="text" id="sofort-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#sofort">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="klarna_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="klarna-name-label">nameLabel</label><input type="text" id="klarna-name-label" value="Nombre"/>
+                <label for="klarna-name-error">nameError</label><input type="text" id="klarna-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="klarna-lastname-label">lastNameLabel</label><input type="text" id="klarna-lastname-label" value="Apellido"/>
+                <label for="klarna-lastname-error">lastNameError</label><input type="text" id="klarna-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="klarna-email-label">emailLabel</label><input type="text" id="klarna-email-label" value="Email"/>
+                <label for="klarna-email-error">emailError</label><input type="text" id="klarna-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="klarna-address-label">addressLabel</label><input type="text" id="klarna-address-label" value="Dirección"/>
+                <label for="klarna-address-error">addressError</label><input type="text" id="klarna-address-error" value="La dirección no es válida"/>
+            </div>
+            <div class="row">
+                <label for="klarna-zipcode-label">zipCodeLabel</label><input type="text" id="klarna-zipcode-label" value="Código postal"/>
+                <label for="klarna-zipcode-error">zipCodeError</label><input type="text" id="klarna-zipcode-error" value="El código postal no es válido"/>
+            </div>
+            <div class="row">
+                <label for="klarna-city-label">cityLabel</label><input type="text" id="klarna-city-label" value="Ciudad"/>
+                <label for="klarna-city-error">cityError</label><input type="text" id="klarna-city-error" value="La ciudad no es válida"/>
+            </div>
+            <div class="row">
+                <label for="klarna-country-label">countryLabel</label><input type="text" id="klarna-country-label" value="País"/>
+                <label for="klarna-country-error">countryError</label><input type="text" id="klarna-country-error" value="El pais no es válido"/>
+            </div>
+            <div class="row">
+                <label for="klarna-state-label">stateLabel</label><input type="text" id="klarna-state-label" value="Estado"/>
+                <label for="klarna-state-error">stateError</label><input type="text" id="klarna-state-error" value="El estado no es válido"/>
+            </div>
+            <div class="row">
+                <label for="klarna-prefilled-name">prefilledName</label><input type="text" id="klarna-prefilled-name" value=""/>
+                <label for="klarna-prefilled-lastname">prefilledLastName</label><input type="text" id="klarna-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="klarna-prefilled-email">prefilledEmail</label><input type="text" id="klarna-prefilled-email" value=""/>
+                <label for="klarna-prefilled-address">prefilledAddress</label><input type="text" id="klarna-prefilled-address" value=""/>
+            </div>
+            <div class="row">
+                <label for="klarna-prefilled-zipcode">prefilledZipCode</label><input type="text" id="klarna-prefilled-zipcode" value=""/>
+                <label for="klarna-prefilled-city">prefilledCity</label><input type="text" id="klarna-prefilled-city" value=""/>
+            </div>
+            <div class="row">
+                <label for="klarna-prefilled-country">prefilledCountry</label><input type="text" id="klarna-prefilled-country" value=""/>
+                <label for="klarna-prefilled-state">prefilledState</label><input type="text" id="klarna-prefilled-state" value=""/>
+            </div>
+            </hr>
+            <div class="row">
+                <label for="klarna-font">font</label><input type="text" id="klarna-font" value="system-ui"/>
+                <label for="klarna-text-color">textColor</label><input type="color" id="klarna-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="klarna-background-color">backgroundColor</label><input type="color" id="klarna-background-color" value="#FFFFFF"/>
+                <label for="klarna-error-color">errorColor</label><input type="color" id="klarna-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="klarna-border-color">borderColor</label><input type="color" id="klarna-border-color" value="#FFA8CD"/>
+                <label for="klarna-icon-color">iconColor</label><input type="color" id="klarna-icon-color" value="#FFA8CD"/>
+            </div>
+            <div class="row">
+                <label for="klarna-border-radius">borderRadius</label><input type="text" id="klarna-border-radius" value="16px"/>
+                <label for="klarna-padding">padding</label><input type="text" id="klarna-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="klarna-input-text-size">inputTextSize</label><input type="text" id="klarna-input-text-size" value="14px"/>
+                <label for="klarna-label-text-size">labelTextSize</label><input type="text" id="klarna-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#klarna">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="viacash_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="viacash-name-label">nameLabel</label><input type="text" id="viacash-name-label" value="Nombre"/>
+                <label for="viacash-name-error">nameError</label><input type="text" id="viacash-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="viacash-lastname-label">lastNameLabel</label><input type="text" id="viacash-lastname-label" value="Apellido"/>
+                <label for="viacash-lastname-error">lastNameError</label><input type="text" id="viacash-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="viacash-email-label">emailLabel</label><input type="text" id="viacash-email-label" value="Email"/>
+                <label for="viacash-email-error">emailError</label><input type="text" id="viacash-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="viacash-prefilled-name">prefilledName</label><input type="text" id="viacash-prefilled-name" value=""/>
+                <label for="viacash-prefilled-lastname">prefilledLastName</label><input type="text" id="viacash-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="viacash-prefilled-email">prefilledEmail</label><input type="text" id="viacash-prefilled-email" value=""/>
+                <label></label><input style="border: 0;"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="viacash-font">font</label><input type="text" id="viacash-font" value="system-ui"/>
+                <label for="viacash-text-color">textColor</label><input type="color" id="viacash-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="viacash-background-color">backgroundColor</label><input type="color" id="viacash-background-color" value="#FFFFFF"/>
+                <label for="viacash-error-color">errorColor</label><input type="color" id="viacash-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="viacash-border-color">borderColor</label><input type="color" id="viacash-border-color" value="#52FFD0"/>
+                <label for="viacash-icon-color">iconColor</label><input type="color" id="viacash-icon-color" value="#52FFD0"/>
+            </div>
+            <div class="row">
+                <label for="viacash-border-radius">borderRadius</label><input type="text" id="viacash-border-radius" value="16px"/>
+                <label for="viacash-padding">padding</label><input type="text" id="viacash-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="viacash-input-text-size">inputTextSize</label><input type="text" id="viacash-input-text-size" value="14px"/>
+                <label for="viacash-label-text-size">labelTextSize</label><input type="text" id="viacash-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#viacash">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="transfer_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="transfer-name-label">nameLabel</label><input type="text" id="transfer-name-label" value="Nombre"/>
+                <label for="transfer-name-error">nameError</label><input type="text" id="transfer-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="transfer-lastname-label">lastNameLabel</label><input type="text" id="transfer-lastname-label" value="Apellido"/>
+                <label for="transfer-lastname-error">lastNameError</label><input type="text" id="transfer-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="transfer-email-label">emailLabel</label><input type="text" id="transfer-email-label" value="Email"/>
+                <label for="transfer-email-error">emailError</label><input type="text" id="transfer-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="transfer-address-label">addressLabel</label><input type="text" id="transfer-address-label" value="Dirección"/>
+                <label for="transfer-address-error">addressError</label><input type="text" id="transfer-address-error" value="La dirección no es válida"/>
+            </div>
+            <div class="row">
+                <label for="transfer-zipcode-label">zipCodeLabel</label><input type="text" id="transfer-zipcode-label" value="Código postal"/>
+                <label for="transfer-zipcode-error">zipCodeError</label><input type="text" id="transfer-zipcode-error" value="El código postal no es válido"/>
+            </div>
+            <div class="row">
+                <label for="transfer-city-label">cityLabel</label><input type="text" id="transfer-city-label" value="Ciudad"/>
+                <label for="transfer-city-error">cityError</label><input type="text" id="transfer-city-error" value="La ciudad no es válida"/>
+            </div>
+            <div class="row">
+                <label for="transfer-country-label">countryLabel</label><input type="text" id="transfer-country-label" value="País"/>
+                <label for="transfer-country-error">countryError</label><input type="text" id="transfer-country-error" value="El pais no es válido"/>
+            </div>
+            <div class="row">
+                <label for="transfer-state-label">stateLabel</label><input type="text" id="transfer-state-label" value="Estado"/>
+                <label for="transfer-state-error">stateError</label><input type="text" id="transfer-state-error" value="El estado no es válido"/>
+            </div>
+            <div class="row">
+                <label for="transfer-prefilled-name">prefilledName</label><input type="text" id="transfer-prefilled-name" value=""/>
+                <label for="transfer-prefilled-lastname">prefilledLastName</label><input type="text" id="transfer-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="transfer-prefilled-email">prefilledEmail</label><input type="text" id="transfer-prefilled-email" value=""/>
+                <label for="transfer-prefilled-address">prefilledAddress</label><input type="text" id="transfer-prefilled-address" value=""/>
+            </div>
+            <div class="row">
+                <label for="transfer-prefilled-zipcode">prefilledZipCode</label><input type="text" id="transfer-prefilled-zipcode" value=""/>
+                <label for="transfer-prefilled-city">prefilledCity</label><input type="text" id="transfer-prefilled-city" value=""/>
+            </div>
+            <div class="row">
+                <label for="transfer-prefilled-country">prefilledCountry</label><input type="text" id="transfer-prefilled-country" value=""/>
+                <label for="transfer-prefilled-state">prefilledState</label><input type="text" id="transfer-prefilled-state" value=""/>
+            </div>
+            </hr>
+            <div class="row">
+                <label for="transfer-font">font</label><input type="text" id="transfer-font" value="system-ui"/>
+                <label for="transfer-text-color">textColor</label><input type="color" id="transfer-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="transfer-background-color">backgroundColor</label><input type="color" id="transfer-background-color" value="#FFFFFF"/>
+                <label for="transfer-error-color">errorColor</label><input type="color" id="transfer-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="transfer-border-color">borderColor</label><input type="color" id="transfer-border-color" value="#EE1B4E"/>
+                <label for="transfer-icon-color">iconColor</label><input type="color" id="transfer-icon-color" value="#EE1B4E"/>
+            </div>
+            <div class="row">
+                <label for="transfer-border-radius">borderRadius</label><input type="text" id="transfer-border-radius" value="16px"/>
+                <label for="transfer-padding">padding</label><input type="text" id="transfer-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="transfer-input-text-size">inputTextSize</label><input type="text" id="transfer-input-text-size" value="14px"/>
+                <label for="transfer-label-text-size">labelTextSize</label><input type="text" id="transfer-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#transfer">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="multibanco_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="multibanco-button-text">buttonText</label><input type="text" id="multibanco-button-text" value="Multibanco"/>
+                <label for="multibanco-font">font</label><input type="text" id="multibanco-font" value="system-ui"/>
+            </div>
+            <div class="row">
+                <label for="multibanco-primary-color">primaryColor</label><input type="color" id="multibanco-primary-color" value="#3A75C4"/>
+                <label for="multibanco-text-color">textColor</label><input type="color" id="multibanco-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="multibanco-background-color">backgroundColor</label><input type="color" id="multibanco-background-color" value="#FFFFFF"/>
+                <label for="multibanco-border-radius">borderRadius</label><input type="text" id="multibanco-border-radius" value="16px"/>
+            </div>
+            <div class="row">
+                <label for="multibanco-padding">padding</label><input type="text" id="multibanco-padding" value="15px"/>
+                <label for="multibanco-button-text-size">buttonTextSize</label><input type="text" id="multibanco-button-text-size" value="19px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#multibanco">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="mbway_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="mbway-name-label">nameLabel</label><input type="text" id="mbway-name-label" value="Nombre"/>
+                <label for="mbway-name-error">nameError</label><input type="text" id="mbway-name-error" value="El nombre no es válido"/>
+            </div>
+            <div class="row">
+                <label for="mbway-lastname-label">lastNameLabel</label><input type="text" id="mbway-lastname-label" value="Apellido"/>
+                <label for="mbway-lastname-error">lastNameError</label><input type="text" id="mbway-lastname-error" value="El apellido no es válido"/>
+            </div>
+            <div class="row">
+                <label for="mbway-email-label">emailLabel</label><input type="text" id="mbway-email-label" value="Email"/>
+                <label for="mbway-email-error">emailError</label><input type="text" id="mbway-email-error" value="El email no es válido"/>
+            </div>
+            <div class="row">
+                <label for="mbway-prefix-label">prefixLabel</label><input type="text" id="mbway-prefix-label" value="Prefijo"/>
+                <label for="mbway-prefix-error">prefixError</label><input type="text" id="mbway-prefix-error" value="El prefijo no es válido"/>
+            </div>
+            <div class="row">
+                <label for="mbway-phone-label">phoneLabel</label><input type="text" id="mbway-phone-label" value="Número de teléfono"/>
+                <label for="mbway-phone-error">phoneError</label><input type="text" id="mbway-phone-error" value="El número no es válido"/>
+            </div>
+            <div class="row">
+                <label for="mbway-prefilled-name">prefilledName</label><input type="text" id="mbway-prefilled-name" value=""/>
+                <label for="mbway-prefilled-lastname">prefilledLastName</label><input type="text" id="mbway-prefilled-lastname" value=""/>
+            </div>
+            <div class="row">
+                <label for="mbway-prefilled-email">prefilledEmail</label><input type="text" id="mbway-prefilled-email" value=""/>
+                <label></label><input style="border: 0;"/>
+            </div>
+            <div class="row">
+                <label for="mbway-prefilled-prefix">prefilledPrefix</label><input type="number" id="mbway-prefilled-prefix" maxlength="3" value=""/>
+                <label for="mbway-prefilled-phone">prefilledPhone</label><input type="number" id="mbway-prefilled-phone" maxlength="9" value=""/>
+            </div>
+            <hr/>
+            <div class="row">
+                <label for="mbway-font">font</label><input type="text" id="mbway-font" value="system-ui"/>
+                <label for="mbway-text-color">textColor</label><input type="color" id="mbway-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="mbway-background-color">backgroundColor</label><input type="color" id="mbway-background-color" value="#FFFFFF"/>
+                <label for="mbway-error-color">errorColor</label><input type="color" id="mbway-error-color" value="#FF0000"/>
+            </div>
+            <div class="row">
+                <label for="mbway-border-color">borderColor</label><input type="color" id="mbway-border-color" value="#D60510"/>
+                <label for="mbway-icon-color">iconColor</label><input type="color" id="mbway-icon-color" value="#D60510"/>
+            </div>
+            <div class="row">
+                <label for="mbway-border-radius">borderRadius</label><input type="text" id="mbway-border-radius" value="16px"/>
+                <label for="mbway-padding">padding</label><input type="text" id="mbway-padding" value="15px"/>
+            </div>
+            <div class="row">
+                <label for="mbway-input-text-size">inputTextSize</label><input type="text" id="mbway-input-text-size" value="14px"/>
+                <label for="mbway-label-text-size">labelTextSize</label><input type="text" id="mbway-label-text-size" value="12px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#mbway">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <form id="floa_form" class="config_form">
+            <hr/>
+            <div class="row">
+                <label for="floa-button-text">buttonText</label><input type="text" id="floa-button-text" value="Floa"/>
+                <label for="floa-font">font</label><input type="text" id="floa-font" value="system-ui"/>
+            </div>
+            <div class="row">
+                <label for="floa-primary-color">primaryColor</label><input type="color" id="floa-primary-color" value="#009FFF"/>
+                <label for="floa-text-color">textColor</label><input type="color" id="floa-text-color" value="#000000"/>
+            </div>
+            <div class="row">
+                <label for="floa-background-color">backgroundColor</label><input type="color" id="floa-background-color" value="#FFFFFF"/>
+                <label for="floa-border-radius">borderRadius</label><input type="text" id="floa-border-radius" value="16px"/>
+            </div>
+            <div class="row">
+                <label for="floa-padding">padding</label><input type="text" id="floa-padding" value="15px"/>
+                <label for="floa-button-text-size">buttonTextSize</label><input type="text" id="floa-button-text-size" value="19px"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <a href="https://docs.paylands.com/docs/guides/guide-checkout#floa">Paylands documentation</a>
+            </div>
+            <hr/>
+        </form>
+        <button id="continue-button">Continuar</button>
+    </div>
+</div>
+
+<div id="checkout" class="hidden">
+    <h2>Resumen de la compra</h2>
+    <ul id="cart-items"></ul>
+    <p>Total: <span id="total-amount">0</span>€</p>
+    <div id="payment-iframe"></div>
+    <button id="pay-button" class="disabled">Pagar</button>
+</div>
+
+<script async src="https://ws-paylands.paynopain.com/assets/checkout/paylands-checkout-sdk.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
