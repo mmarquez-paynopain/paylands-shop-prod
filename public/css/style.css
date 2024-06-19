@@ -6,6 +6,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f1f1f1;
 }
 
 header {
@@ -13,8 +14,10 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 1em;
-    background-color: #333;
-    color: white;
+}
+
+main {
+    height: 100%;
 }
 
 #cart-button {
@@ -50,21 +53,21 @@ header {
 }
 
 #cart-button:hover {
-    background-color: #EE1B4E;
+    background-color: #30303050;
 }
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1em;
     padding: 1em;
+    border-radius: 4px;
 }
 
 .product {
     border: 1px solid #ccc;
     padding: 1em;
     text-align: center;
-    background-color: white;
     border-radius: 4px;
 }
 
@@ -77,17 +80,19 @@ header {
 button {
     margin-top: 0.5em;
     cursor: pointer;
-    padding: 0.5em 1em;
     border: none;
     background-color: #EE1B4E;
     color: white;
-    font-size: 1em;
     border-radius: 4px;
+    width: 100%;
     transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.01rem;
 }
 
 button:hover {
-    background-color: #333;
+    background-color: #30303050;
 }
 
 button.disabled {
@@ -236,13 +241,41 @@ a {
 }
 
 #pay-button {
-    width: 200px;
+    max-width: 400px;
+    height: 40px;
+}
+
+.pay-now {
+    height: 47px;
+    margin-top: 12px;
+}
+
+.pay-now:hover {
+    background-color: #30303050 !important;
+}
+
+.button-group {
+    padding-top: 0 !important;
+}
+
+.add-to-cart {
+    height: 45px;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+}
+
+.title img {
+    max-width: 50px;
+    margin-right: 8px;
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
     .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
 
@@ -264,7 +297,7 @@ a {
 
 @media (max-width: 480px) {
     .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     }
 
     .modal-content {

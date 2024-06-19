@@ -2,6 +2,9 @@ import express from 'express';
 import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,14 +17,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 app.post('/proxy', async (req, res) => {
-    const apiUrl = 'https://ws-paylands.paynopain.com/v1/sandbox/payment';
-    const token = '365111e79d624b88ad83339609f968e4';
-
     try {
-        const response = await fetch(apiUrl, {
+        const response = await fetch(process.env.URL, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${process.env.API_KEY}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(req.body),
@@ -37,6 +37,16 @@ app.post('/proxy', async (req, res) => {
         console.error('Error en /proxy:', error.message);
         res.status(500).json({ error: 'Error en la solicitud de pago' });
     }
+});
+
+app.get('/env', (req, res) => {
+    res.json({
+        apiUrl: process.env.URL,
+        apiKey: process.env.API_KEY,
+        signature: process.env.SIGNATURE,
+        service: process.env.SERVICE,
+        checkout: process.env.CHECKOUT
+    });
 });
 
 app.get('*', (req, res) => {
