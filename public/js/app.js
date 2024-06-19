@@ -80,11 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(async data => {
-                const paylandsCheckout = await PaylandsCheckout.create({
-                    token: data.order.token,
-                    environment: "SANDBOX",
-                    mode: "DEMO"
-                });
+                const paylandsCheckout = await PaylandsCheckout.create({token: data.order.token});
 
                 document.querySelector('main').style.display = 'none';
                 checkoutSection.classList.remove('hidden');
@@ -124,11 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(async data => {
-                const paylandsCheckout = await PaylandsCheckout.create({
-                    token: data.order.token,
-                    environment: "SANDBOX",
-                    mode: "DEMO"
-                });
+                const paylandsCheckout = await PaylandsCheckout.create({token: data.order.token});
 
                 const productId = parseInt(button.dataset.id);
                 document.querySelector('main').style.display = 'none';
