@@ -3,6 +3,8 @@ import fetch from 'node-fetch';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import https from 'https';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -13,7 +15,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(express.json());
 
 app.post('/proxy', async (req, res) => {
@@ -25,6 +26,7 @@ app.post('/proxy', async (req, res) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(req.body),
+            agent: new https.Agent({rejectUnauthorized: false}) 
         });
 
         if (!response.ok) {
@@ -34,8 +36,7 @@ app.post('/proxy', async (req, res) => {
         const result = await response.json();
         res.status(200).json(result);
     } catch (error) {
-        console.error('Error en /proxy:', error.message);
-        res.status(500).json({ error: 'Error en la solicitud de pago' });
+        res.status(500).json({ error: 'Error en la solicitud de pago', details: error.message });
     }
 });
 
@@ -53,6 +54,11 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+const httpsOptions = {
+    key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
+    cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem'))
+};
+
+https.createServer(httpsOptions, app).listen(port, () => {
+    console.log(`Server running at https://localhost:${port}`);
 });
