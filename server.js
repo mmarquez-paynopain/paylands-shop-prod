@@ -28,14 +28,14 @@ app.post('/proxy', async (req, res) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.statusText}`);
+            throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
         }
 
         const result = await response.json();
         res.status(200).json(result);
     } catch (error) {
         console.error('Error en /proxy:', error.message);
-        res.status(500).json({ error: 'Error en la solicitud de pago' });
+        res.status(500).json({ error: 'Error en la solicitud de pago', details: error.message });
     }
 });
 
