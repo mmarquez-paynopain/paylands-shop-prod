@@ -133,14 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('payment-iframe').innerHTML = "";
 
                 await paylandsCheckout.google_pay("payment-iframe");
-                await paylandsCheckout.apple_pay("payment-iframe");
+                // await paylandsCheckout.apple_pay("payment-iframe");
                 await paylandsCheckout.payPal({container: 'payment-iframe', form: {}, customization: {}});
                 await paylandsCheckout.multibanco({container: 'payment-iframe', customization: {buttonText: "Pagar ya con Multibanco", primaryColor: "#3A75C4", backgroundColor: "#F1F1F1"}});
                 await paylandsCheckout.floa({container: 'payment-iframe', customization: {buttonText: "Pagar ya con FLOA", primaryColor: "#009FFF", backgroundColor: "#F1F1F1"}});
-
-                document.getElementById('paylands-checkout-paypal').style.height = '114px';
-                document.getElementById('paylands-checkout-multibanco').style.height = '60px';
-                document.getElementById('paylands-checkout-floa').style.height = '60px';
 
                 let paymentMethod = 'card';
 
