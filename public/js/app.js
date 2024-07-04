@@ -10,35 +10,45 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.data.redirect) {
             window.top.location.href = event.data.redirect;
         } else if (event.data.render) {
+            document.getElementById('payment-iframe').innerHTML = '';
+
             const iframe = document.createElement('iframe');
+            iframe.id = 'payment-iframe-3ds';
             iframe.style.width = '100%';
             iframe.style.height = '100%';
-            iframe.frameBorder = '0';
-            iframe.srcdoc = event.data.render;
+            iframe.style.border = 'none';
 
-            document.getElementById('payment-iframe').innerHTML = '';
-            document.getElementById('payment-iframe').style.height = "100%";
-            document.getElementById('payment-iframe').style.maxWidth = "100%";
+            // document.getElementById('cart-button').style.display = 'none';
+            // if (document.getElementById('pay-button')) {
+            //     document.getElementById('pay-button').style.display = 'none';
+            // }
+
             document.getElementById('payment-iframe').appendChild(iframe);
-            document.getElementById('cart-button').style.display = 'none';
-            if (document.getElementById('pay-button')) {
-                document.getElementById('pay-button').style.display = 'none';
-            }
+
+            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+            iframeDocument.open();
+            iframeDocument.write(event.data.render);
+            iframeDocument.close();
+
+            const form = iframeDocument.querySelector('form');
+            if (form) form.submit();
         } else if (event.data.error) {
+            document.getElementById('payment-iframe').innerHTML = '';
+
             const iframe = document.createElement('iframe');
+            iframe.id = 'payment-iframe-3ds';
             iframe.style.width = '100%';
             iframe.style.height = '100%';
-            iframe.frameBorder = '0';
-            iframe.srcdoc = event.data.error;
+            iframe.style.border = 'none';
 
-            document.getElementById('payment-iframe').innerHTML = '';
-            document.getElementById('payment-iframe').style.height = "100%";
-            document.getElementById('payment-iframe').style.maxWidth = "100%";
             document.getElementById('payment-iframe').appendChild(iframe);
-            document.getElementById('cart-button').style.display = 'none';
-            if (document.getElementById('pay-button')) {
-                document.getElementById('pay-button').style.display = 'none';
-            }
+
+            const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+            iframeDocument.open();
+            iframeDocument.write(event.data.error);
+            iframeDocument.close();
         }
     });
     
