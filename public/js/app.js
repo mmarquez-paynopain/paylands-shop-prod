@@ -18,11 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             iframe.style.height = '100%';
             iframe.style.border = 'none';
 
-            // document.getElementById('cart-button').style.display = 'none';
-            // if (document.getElementById('pay-button')) {
-            //     document.getElementById('pay-button').style.display = 'none';
-            // }
-
             document.getElementById('payment-iframe').appendChild(iframe);
 
             const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
@@ -89,9 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             })
             .then(response => response.json())
-            .then(async data => {
-                console.log(data);
-                
+            .then(async data => {                
                 const paylandsCheckout = await PaylandsCheckout.create({token: data.order.token});
                 
                 document.querySelector('main').style.display = 'none';
@@ -132,8 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(response => response.json())
             .then(async data => {
-                console.log(data);
-
                 const paylandsCheckout = await PaylandsCheckout.create({token: data.order.token});
 
                 const productId = parseInt(button.dataset.id);
@@ -142,8 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalAmount.innerText = button.dataset.price;
                 document.getElementById('payment-iframe').innerHTML = "";
 
+                await paylandsCheckout.apple_pay("payment-iframe");
                 await paylandsCheckout.google_pay("payment-iframe");
-                // await paylandsCheckout.apple_pay("payment-iframe");
                 await paylandsCheckout.payPal({container: 'payment-iframe', form: {}, customization: {}});
                 await paylandsCheckout.multibanco({container: 'payment-iframe', customization: {buttonText: "Pagar ya con Multibanco", primaryColor: "#3A75C4", backgroundColor: "#F1F1F1"}});
                 await paylandsCheckout.floa({container: 'payment-iframe', customization: {buttonText: "Pagar ya con FLOA", primaryColor: "#009FFF", backgroundColor: "#F1F1F1"}});
