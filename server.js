@@ -13,11 +13,20 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(express.json());
 
 app.post('/proxy', async (req, res) => {
     try {
+        // Log the environment variables and request body
+        console.log('Environment Variables:', {
+            URL: process.env.URL,
+            API_KEY: process.env.API_KEY,
+            SIGNATURE: process.env.SIGNATURE,
+            SERVICE: process.env.SERVICE,
+            CHECKOUT: process.env.CHECKOUT
+        });
+        console.log('Request Body:', req.body);
+
         const response = await fetch(process.env.URL, {
             method: 'POST',
             headers: {
@@ -27,11 +36,12 @@ app.post('/proxy', async (req, res) => {
             body: JSON.stringify(req.body),
         });
 
+        const text = await response.text();
         if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+            throw new Error(`Error en la solicitud: ${response.status} ${response.statusText} - ${text}`);
         }
 
-        const result = await response.json();
+        const result = JSON.parse(text);
         res.status(200).json(result);
     } catch (error) {
         console.error('Error en /proxy:', error.message);
